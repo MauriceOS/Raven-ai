@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Raven — serverless focus coach
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: python3.13
+    Architectures:
+      - arm64
+
+Parameters:
+  BedrockModelId:
+    Type: String
+    Default: amazon.nova-micro-v1:0
+    Description: Cheapest Bedrock model for recommendations and chat
+
+Resources:
+  RavenTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: raven-lite
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      Tags:
+        - Key: Project
+          Value: RavenLite
+        - Key: CostCenter
+          Value: FreeTier
+
+  RavenApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: raven-lite-api
+      CodeUri: ../backend/
+      Handler: handler.handler
+      Description: Raven API — goals, recommendations, schedule
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RavenTable
+          BEDROCK_MODEL_ID: !Ref BedrockModelId
+          BEDROCK_MAX_TOKENS: "400"
+          USER_ID: default
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RavenTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:Converse
+              Resource:
+                - !Sub "arn:aws:bedrock:${AWS::Region}::foundation-model/${BedrockModelId}"
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - "*"
+          AllowMethods:
+            - "*"
+          AllowHeaders:
+            - "*"
+          MaxAge: 86400
+      Tags:
+        Project: RavenLite
+
+Outputs:
+  ApiUrl:
+    Description: Lambda Function URL — set as VITE_API_URL in frontend
+    Value: !GetAtt RavenApiFunctionUrl.FunctionUrl
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref RavenTable
+  Region:
+    Description: Deploy region (use us-east-1 for Bedrock)
+    Value: !Ref AWS::Region
+  TeardownHint:
+    Description: Delete stack when done to avoid any future cost
+    Value: sam delete --stack-name raven-lite
