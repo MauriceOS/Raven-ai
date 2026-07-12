@@ -8,7 +8,7 @@ Raven reads your goal, milestones, energy, and schedule — then returns a daily
 **Live demo:** [mauriceos.github.io/Raven-ai](https://mauriceos.github.io/Raven-ai) *(after Pages deploy)*
 ## Architecture
 
-![Raven architecture — React, Lambda Function URL, DynamoDB, Bedrock Nova Micro](docs/architecture.png)
+![Raven Architecture: GitHub Pages, Lambda, DynamoDB, Bedrock](docs/architecture.png)
 
 | Service | Role |
 |---------|------|
