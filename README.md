@@ -5,7 +5,25 @@
 Raven reads your goal, milestones, energy, and schedule — then returns a daily focus recommendation via Amazon Bedrock (Nova Micro).
 
 **Repo:** [github.com/MauriceOS/Raven-ai](https://github.com/MauriceOS/Raven-ai)  
-**Live demo:** [mauriceos.github.io/Raven-ai](https://mauriceos.github.io/Raven-ai) *(after Pages deploy)*
+**Live demo:** [mauriceos.github.io/Raven-ai](https://mauriceos.github.io/Raven-ai)
+
+## Desktop view
+
+### Today
+Daily focus, energy check-in, schedule, and milestones.
+
+![Raven Today view — focus recommendation, energy, schedule, milestones](docs/screenshots/today.png)
+
+### Progress
+Focus sessions, completed milestones, energy history, and past recommendations.
+
+![Raven Progress view — milestones, energy history, recommendations](docs/screenshots/progress.png)
+
+### Plan
+Week schedule Raven reads when building today's focus.
+
+![Raven Plan view — add events and study blocks](docs/screenshots/plan.png)
+
 ## Architecture
 
 ![Raven Architecture: GitHub Pages, Lambda, DynamoDB, Bedrock](docs/architecture.png)
