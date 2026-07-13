@@ -55,5 +55,3 @@ npm run dev
 Open http://localhost:5173
 
 **Frontend (GitHub Pages):** [docs/DEPLOY.md#github-pages](docs/DEPLOY.md#github-pages)
-
-Challenge write-up draft: [docs/ARTICLE_TEMPLATE.md](docs/ARTICLE_TEMPLATE.md)
